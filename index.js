@@ -37,7 +37,7 @@ mysql.createConnection({
   host: "localhost",
   user: "root",
   database: "contact_db",
-  password: "sharda2911",
+  password: "pass",
 }).then((connection) => {
   db = connection;
   console.log("Database connected successfully");
