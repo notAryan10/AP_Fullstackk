@@ -2,13 +2,13 @@ const mysql = require("mysql2/promise");
 const express = require("express");
 const cors = require("cors");
 
-const app = express();
+const app = express()
 
-app.use(express.json());
+app.use(express.json())
 
 app.use(cors({
   origin: "http://localhost:5173"  
-}));
+}))
 
 let db;
 
@@ -19,7 +19,19 @@ app.get("/contacts", async (req, res) => {
   } catch (err) {
     res.status(500).send("Error fetching contacts");
   }
-});
+})
+
+app.get("/contacts/:id", async (req, res) => {
+  try {
+    const [rows] = await db.query("SELECT * FROM contacts WHERE id = ?", [req.params.id]);
+    if (rows.length === 0) {
+      return res.status(404).send("Contact not found");
+    }
+    res.json(rows[0]);
+  } catch (err) {
+    console.log(err)
+}
+})
 
 app.post("/contacts", async (req, res) => {
   try {
@@ -31,7 +43,7 @@ app.post("/contacts", async (req, res) => {
   } catch (err) {
     res.status(500).send("Error inserting contact");
   }
-});
+})
 
 mysql.createConnection({
   host: "localhost",
@@ -43,5 +55,5 @@ mysql.createConnection({
   console.log("Database connected successfully");
   app.listen(3000, () => {
     console.log("Server started on port 3000");
-  });
-});
+  })
+})
